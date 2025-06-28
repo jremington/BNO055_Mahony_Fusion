@@ -7,6 +7,12 @@ C/C++ Arduino code in this repository can be used to access the raw sensor data 
 
 To use the sensor calibration program, run the BNO_readRaw program to collect accelerometer and magnetometer data, while rotating the sensor steadily and slowly to cover as much of the 3D sphere as possible. A terminal program can be used to capture a log file, which will be in Excel .CVS format (comma separated values): one line each of acc_x, acc_y, acc_z, mag_x, mag_y and mag_z.  
 
-Edit this file to create two .cvs files, on each for the accelerometer data, and submit each in a separate run of calibrate3.py.  The output of that program will be offsets and a correction matrix to be applied to subsequent raw accelerometer and magnetometer data. The correction data need to be edited and included in the source code for the fusion and tilt-compensated compass programs.
+Edit this file to create two .cvs files, on each for the accelerometer data, and submit each in a separate run of calibrate3.py (edit input file name in code).
+
+The output of calibrate3.py will be offsets and a correction matrix to be applied to subsequent raw accelerometer and magnetometer data. The correction data need to be edited and included in the source code for the fusion and tilt-compensated compass programs.
 
 The two programs BNO_055_tiltComp.ino and BNO055_Mahony.ino show how the corrections are applied.
+
+#Example output representation of calibrated accelerometer data (automatically produced by calibrate3.py)
+
+![bno055_acc_cal](https://github.com/user-attachments/assets/44bc021d-9d8b-48cd-ad0e-90138bdcdff9)

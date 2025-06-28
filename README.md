@@ -24,6 +24,8 @@ The two programs BNO_055_tiltComp.ino and BNO055_Mahony.ino show how the correct
 #NOTES on sensor coordinate system
 
 The default x,y,z Cartesian coordinate system for the BNO055 is found from the IC package orientation.
-The code assumes X points North and Z up for yaw=0, pitch and roll parallel to the Y and X axes. These axes can be remapped in the code AFTER calibration corrections are applied, but be sure to maintain a right handed coordinate system. See comments in code.
+The code assumes X points North and Z up for yaw=0, pitch and roll are about the Y and X axes respectively. 
+
+The default axial assignments can be remapped in the code AFTER calibration corrections are applied, but be sure to maintain a right handed coordinate system. See comments in code.
 
 ![BNO055_sensor_axes](https://github.com/user-attachments/assets/29e71baa-8792-407b-90f1-b32d8829fae2)

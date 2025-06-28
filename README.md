@@ -14,7 +14,7 @@ Edit this file to create two .cvs files, on each for the accelerometer data, and
 
 The output of calibrate3.py will be offsets and a correction matrix to be applied to subsequent raw accelerometer and magnetometer data. The correction data need to be edited and included in the source code for the fusion and tilt-compensated compass programs.
 
-The two programs BNO_055_tiltComp.ino and BNO055_Mahony.ino show how the corrections are applied.
+The two programs BNO055_tiltComp.ino and BNO055_Mahony.ino show how the corrections are applied.
 
 #Example output representation of calibrated accelerometer data (automatically produced by calibrate3.py)
 

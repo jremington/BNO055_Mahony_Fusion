@@ -6,7 +6,7 @@ Fusion filter replaces faulty firmware
 
 Many users have reported the poor performance of the obsolete Bosch BNO055 Absolute Orientation Sensor, which uses proprietary firmware to compute 3D orientations from the built in 9DOF sensors. The problem appears to be largely due to the poor performance of the built in sensor calibration, which cannot be turned off.
 
-C/C++ Arduino code in this repository can be used to access the raw sensor data from the accelerometer, magnetometer and gyro, which are considerably noisier than more modern replacements, but are still useful.  I include a tilt compensated compass, which reports heading, a Mahony fusion filter which reports 3D orientation, and a sensor calibration program in Python, which corrects offsets and relative axial scale factor errors in the magnetometer and accelerometer data.
+**C/C++ Arduino** code in this repository can be used to access the raw sensor data from the accelerometer, magnetometer and gyro, which are considerably noisier than more modern replacements, but are still useful.  I include a tilt compensated compass, which reports heading, a Mahony fusion filter which reports 3D orientation, and a sensor calibration program in Python, which corrects offsets and relative axial scale factor errors in the magnetometer and accelerometer data.
 
 To use the sensor calibration program, run the BNO_readRaw program to collect accelerometer and magnetometer data, while rotating the sensor steadily and slowly to cover as much of the 3D sphere as possible. A terminal program can be used to capture a log file, which will be in Excel .CVS format (comma separated values): one line each of acc_x, acc_y, acc_z, mag_x, mag_y and mag_z.  
 

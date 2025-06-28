@@ -10,6 +10,8 @@ int16_t acc[3], gyro[3], mag[3];
 
 // VERY IMPORTANT!
 //These are the previously determined offsets and scale factor corrections for accelerometer and magnetometer
+// Sensor specific! Must be calibrated and these constants updated for final sensor installation.
+
 float gyro_offsets[3] = {0.0}; //insert predetermined offsets
 bool cal_gyro = true;      //  or calibrate at startup
 

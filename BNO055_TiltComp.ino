@@ -1,4 +1,5 @@
-
+// Tilt-compensated compass for BNO055
+// S. James Remington 6/28/2025
 #include <Wire.h>
 #include "BNO055.h"
 
@@ -8,6 +9,7 @@ int16_t acc[3], gyro[3], mag[3];
 
 // VERY IMPORTANT!
 //These are the previously determined offsets and scale factor corrections for accelerometer and magnetometer
+// Sensor specific! Must be calibrated and these constants updated for final sensor installation.
 
 //accelerometer
 float A_B[3]

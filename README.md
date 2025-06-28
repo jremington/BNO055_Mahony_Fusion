@@ -1,4 +1,7 @@
 # BNO055_Mahony_Fusion
+
+##New life for your old BNO055!
+
 Fusion filter replaces faulty firmware
 
 Many users have reported the poor performance of the obsolete Bosch BNO055 Absolute Orientation Sensor, which uses proprietary firmware to compute 3D orientations from the built in 9DOF sensors. The problem appears to be largely due to the poor performance of the built in sensor calibration, which cannot be turned off.

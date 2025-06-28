@@ -1,3 +1,6 @@
+// Mahony fusion filter for BNO055
+// S. James Remington 6/28/2025
+
 #include <Wire.h>
 #include "BNO055.h"
 

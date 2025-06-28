@@ -1,6 +1,6 @@
 # BNO055_Mahony_Fusion
 
-##New life for your old BNO055!
+**New life for your old BNO055!
 
 Fusion filter replaces faulty firmware
 

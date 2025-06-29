@@ -163,10 +163,12 @@ void loop() {
       Serial.print(pitch, 0);
       Serial.print(", ");
       Serial.print(roll, 0);
+      /* print error vector mag for setting Kp
       Serial.print(", ");
       long tmp = 10000 * eMag;
-      if (tmp > 300) tmp = 300; //debug error vector magnitude
+      if (tmp > 300) tmp = 300; //cap max
       Serial.print(tmp);
+      */
       Serial.println();
       lastPrint = millis(); // Update lastPrint time
     }

@@ -35,7 +35,7 @@ float declination = -14.84;
 
 // These are the free parameters in the Mahony filter and fusion scheme,
 // Kp for proportional feedback, Ki for integral
-// Kp is not optimized and will depend on the sensor. Kp =1.0 works; Ki seems not to be needed.
+// Kp is not optimized and will depend on the sensor. Kp=1.0 works well; Ki seems not to be needed.
 
 #define Kp 1.0
 #define Ki 0.0

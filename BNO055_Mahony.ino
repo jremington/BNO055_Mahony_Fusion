@@ -35,17 +35,17 @@ float declination = -14.84;
 
 // These are the free parameters in the Mahony filter and fusion scheme,
 // Kp for proportional feedback, Ki for integral
-// Kp is not optimized and will depend on the sensor. Kp=1.0 works well; Ki seems not to be needed.
+// Kp is not optimized and will depend on the sensor. Kp =1.0 works; Ki seems not to be needed.
 
 #define Kp 1.0
 #define Ki 0.0
 
 unsigned long now = 0, lastUpdate = 0, lastPrint = 0; //micros() timers for AHRS loop
 float deltat = 0;  //loop time in seconds
-#define PRINT_SPEED 300 // ms between angle prints
+#define PRINT_SPEED 200 // ms between angle prints
 float eMag = 0.0; //debug, magnitude of error vector (global)
 
-// Vector to hold quaternion
+// Vector for quaternion
 float q[4] = {1.0, 0.0, 0.0, 0.0};
 float yaw, pitch, roll; //Euler angle output
 
@@ -163,16 +163,16 @@ void loop() {
       Serial.print(pitch, 0);
       Serial.print(", ");
       Serial.print(roll, 0);
-      /* print error vector mag for setting Kp
-      Serial.print(", ");
-      long tmp = 10000 * eMag;
-      if (tmp > 300) tmp = 300; //cap max
-      Serial.print(tmp);
+      /*
+        Serial.print(", ");
+        long tmp = 10000 * eMag;
+        if (tmp > 300) tmp = 300; //debug error vector magnitude
+        Serial.print(tmp);
       */
       Serial.println();
       lastPrint = millis(); // Update lastPrint time
     }
-    lastUpdate=micros();
+    lastUpdate = micros();
   }
 }
 
@@ -234,17 +234,17 @@ void get_scaled_IMU(float Axyz[3], float Mxyz[3]) {
 // The two reference vectors are now Up (Z, Acc) and West (Acc cross Mag)
 // sjr 3/2021
 // input vectors ax, ay, az and mx, my, mz MUST be normalized!
-// gx, gy, gz must be in units of radians/second
+// gx, gy, gz MUST be in units of radians/second
 //
 void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy, float gz, float mx, float my, float mz, float deltat)
 {
-  // Vector to hold integral error for Mahony method
+  // Vector for integral error for Mahony method
   static float eInt[3] = {0.0, 0.0, 0.0};
   // short name local variable for readability
   float q1 = q[0], q2 = q[1], q3 = q[2], q4 = q[3];
   float norm;
   float hx, hy, hz;  //observed West horizon vector W = AxM
-  float ux, uy, uz, wx, wy, wz; //calculated A (Up) and W in body frame
+  float ux, uy, uz, wx, wy, wz; //calculated Earth normal A (Up) and West in body frame
   float ex, ey, ez;
 
   // Auxiliary variables to avoid repeated arithmetic
@@ -289,16 +289,16 @@ void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy, fl
   ey = (az * ux - ax * uz) + (hz * wx - hx * wz);
   ez = (ax * uy - ay * ux) + (hx * wy - hy * wx);
   eMag = ex * ex + ey * ey + ez * ez; //debug, squared magnitude of error vector
-  
+
   if (Ki > 0.0f)
   {
     eInt[0] += ex;      // accumulate integral error
     eInt[1] += ey;
     eInt[2] += ez;
     // Apply I feedback
-    gx += Ki * eInt[0]*deltat;
-    gy += Ki * eInt[1]*deltat;
-    gz += Ki * eInt[2]*deltat;
+    gx += Ki * eInt[0] * deltat;
+    gy += Ki * eInt[1] * deltat;
+    gz += Ki * eInt[2] * deltat;
   }
 
 
@@ -306,7 +306,6 @@ void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy, fl
   gx = gx + Kp * ex;
   gy = gy + Kp * ey;
   gz = gz + Kp * ez;
-
 
   //update quaternion with integrated contribution
   // small correction 1/11/2022, see https://github.com/kriswiner/MPU9250/issues/447

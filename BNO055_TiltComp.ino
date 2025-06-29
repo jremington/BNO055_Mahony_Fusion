@@ -42,7 +42,7 @@ float declination = -14.84;
   parallel to the ground, with coordinates {X, Y, Z} (in magnetometer frame of reference).
 */
 float p[] = {1, 0, 0};
-//float p[] = {0, -1, 0};  //if Y marking on sensor board points toward 180 (due South)
+//float p[] = {0, -1, 0};  //for North = -Y on Adafruit sensor board, short edge of board is N-S.
 
 // utility routines for Wire
 // get N bytes of data, starting from address "reg"

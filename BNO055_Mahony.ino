@@ -40,8 +40,8 @@ float declination = -14.84;
 
 // These are the free parameters in the Mahony filter and fusion scheme,
 // Kp for proportional feedback, Ki for integral
-// Kp is not yet optimized (slight overshoot apparent after rapid sensor reorientations). Ki is not used.
-#define Kp 15.0
+// Kp is not yet optimized and will depend on sensor noise. 1.0 works;  Ki seems not needed.
+#define Kp 1.0
 #define Ki 0.0
 
 unsigned long now = 0, last = 0; //micros() timers for AHRS loop

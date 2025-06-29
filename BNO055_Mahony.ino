@@ -1,6 +1,3 @@
-// Mahony fusion filter for BNO055
-// S. James Remington 6/28/2025
-
 #include <Wire.h>
 #include "BNO055.h"
 
@@ -10,8 +7,6 @@ int16_t acc[3], gyro[3], mag[3];
 
 // VERY IMPORTANT!
 //These are the previously determined offsets and scale factor corrections for accelerometer and magnetometer
-// Sensor specific! Must be calibrated and these constants updated for final sensor installation.
-
 float gyro_offsets[3] = {0.0}; //insert predetermined offsets
 bool cal_gyro = true;      //  or calibrate at startup
 
@@ -40,15 +35,15 @@ float declination = -14.84;
 
 // These are the free parameters in the Mahony filter and fusion scheme,
 // Kp for proportional feedback, Ki for integral
-// Kp is not yet optimized and will depend on sensor noise. 1.0 works;  Ki seems not needed.
+// Kp is not optimized and will depend on the sensor. Kp =1.0 works; Ki seems not to be needed.
+
 #define Kp 1.0
 #define Ki 0.0
 
-unsigned long now = 0, last = 0; //micros() timers for AHRS loop
+unsigned long now = 0, lastUpdate = 0, lastPrint = 0; //micros() timers for AHRS loop
 float deltat = 0;  //loop time in seconds
-
 #define PRINT_SPEED 300 // ms between angle prints
-unsigned long lastPrint = 0; // Keep track of print time
+float eMag = 0.0; //debug, magnitude of error vector (global)
 
 // Vector to hold quaternion
 float q[4] = {1.0, 0.0, 0.0, 0.0};
@@ -71,8 +66,6 @@ void I2C_writeReg(uint8_t I2Caddr, uint8_t reg, uint8_t value) {
   Wire.write(value);
   Wire.endTransmission(true);
 }
-
-bool debug_drift = false;  // set to true to record and subtract initial angles for drift check
 
 void setup() {
 
@@ -109,8 +102,7 @@ void setup() {
 }
 
 void loop() {
-  static float yaw_start, pitch_start, roll_start;
-  
+
   float Gxyz[3] = {0}, Axyz[3] = {0}, Mxyz[3] = {0}; //centered and scaled gyro/accel/mag data
 
   I2C_get(BNO055_A0, BNO055_ACCEL_DATA, (uint8_t *)acc, 6);  //little endian in both sensor and Arduino
@@ -122,65 +114,64 @@ void loop() {
   for (int i = 0; i < 3; i++) Gxyz[i] = (gyro[i] - gyro_offsets[i]) / 900.0; //convert to radians/sec
 
 
-  // if necessary, rempap axes here. X axis is assumed to point magnetic North for yaw = 0
+  // if necessary, remap axes here. X axis is assumed to point magnetic North for yaw = 0
 
   now = micros();
-  deltat = (now - last) * 1.0e-6; //seconds since last update
-  last = now;
+  if (now - lastUpdate > 50000) { //20 Hz update rate for magnetometer. Faster OK?
+    deltat = (now - lastUpdate) * 1.0e-6; //seconds since last update
 
-  MahonyQuaternionUpdate(Axyz[0], Axyz[1], Axyz[2], Gxyz[0], Gxyz[1], Gxyz[2],
-                         Mxyz[0], Mxyz[1], Mxyz[2], deltat);
+    MahonyQuaternionUpdate(Axyz[0], Axyz[1], Axyz[2], Gxyz[0], Gxyz[1], Gxyz[2],
+                           Mxyz[0], Mxyz[1], Mxyz[2], deltat);
 
-  if (millis() - lastPrint > PRINT_SPEED) {
+    if (millis() - lastPrint > PRINT_SPEED) {
 
-    // Define Tait-Bryan angles. Strictly valid only for approximately level movement
+      // occasionally report Tait-Bryan angles.
+      // Strictly valid only for approximately level movement
 
-    // Standard sensor orientation : X magnetic North, Y West, Z Up (NWU)
-    // this code corrects for magnetic declination.
-    // Pitch is angle between sensor x-axis and Earth ground plane, toward the
-    // Earth is positive, up toward the sky is negative. Roll is angle between
-    // sensor y-axis and Earth ground plane, y-axis up is positive roll.
-    // Tait-Bryan angles as well as Euler angles are
-    // non-commutative; that is, the get the correct orientation the rotations
-    // must be applied in the correct order.
-    //
-    // http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
-    // which has additional links.
+      // Standard sensor orientation : X magnetic North, Y West, Z Up (NWU)
+      // this code corrects for magnetic declination.
+      // Pitch is angle between sensor x-axis and Earth ground plane, toward the
+      // Earth is positive, up toward the sky is negative. Roll is angle between
+      // sensor y-axis and Earth ground plane, y-axis up is positive roll.
+      // Tait-Bryan angles as well as Euler angles are
+      // non-commutative; that is, the get the correct orientation the rotations
+      // must be applied in the correct order.
+      //
+      // http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+      // which has additional links.
 
-    // WARNING: This angular conversion is for DEMONSTRATION PURPOSES ONLY. It WILL
-    // MALFUNCTION for certain combinations of angles! See https://en.wikipedia.org/wiki/Gimbal_lock
+      // WARNING: This angular conversion is for DEMONSTRATION PURPOSES ONLY. It WILL
+      // MALFUNCTION for certain combinations of angles! See https://en.wikipedia.org/wiki/Gimbal_lock
 
-    roll  = atan2((q[0] * q[1] + q[2] * q[3]), 0.5 - (q[1] * q[1] + q[2] * q[2]));
-    pitch = asin(2.0 * (q[0] * q[2] - q[1] * q[3]));
-    yaw   = atan2((q[1] * q[2] + q[0] * q[3]), 0.5 - ( q[2] * q[2] + q[3] * q[3]));
-    // to degrees
-    yaw   *= 180.0 / PI;
-    pitch *= 180.0 / PI;
-    roll *= 180.0 / PI;
+      roll  = atan2((q[0] * q[1] + q[2] * q[3]), 0.5 - (q[1] * q[1] + q[2] * q[2]));
+      pitch = asin(2.0 * (q[0] * q[2] - q[1] * q[3]));
+      yaw   = atan2((q[1] * q[2] + q[0] * q[3]), 0.5 - ( q[2] * q[2] + q[3] * q[3]));
+      // to degrees
+      yaw   *= 180.0 / PI;
+      pitch *= 180.0 / PI;
+      roll *= 180.0 / PI;
 
-    // http://www.ngdc.noaa.gov/geomag-web/#declination
-    //conventional nav, yaw increases CW from North, corrected for local magnetic declination
+      // http://www.ngdc.noaa.gov/geomag-web/#declination
+      //conventional nav, yaw increases CW from North, corrected for local magnetic declination
 
-    yaw = -(yaw + declination);
-    if (yaw < 0) yaw += 360.0;
-    if (yaw >= 360.0) yaw -= 360.0;
-    
-  if (debug_drift) {  //check long term drift from fixed start
-    debug_drift = false;
-    yaw_start=yaw;
-    pitch_start=pitch;
-    roll_start=roll; 
+      yaw = -(yaw + declination);
+      if (yaw < 0) yaw += 360.0;
+      if (yaw >= 360.0) yaw -= 360.0;
+
+      Serial.print(yaw, 0);
+      Serial.print(", ");
+      Serial.print(pitch, 0);
+      Serial.print(", ");
+      Serial.print(roll, 0);
+      Serial.print(", ");
+      long tmp = 10000 * eMag;
+      if (tmp > 300) tmp = 300; //debug error vector magnitude
+      Serial.print(tmp);
+      Serial.println();
+      lastPrint = millis(); // Update lastPrint time
+    }
+    lastUpdate=micros();
   }
-  
-    Serial.print(yaw-yaw_start, 0);
-    Serial.print(", ");
-    Serial.print(pitch-pitch_start, 0);
-    Serial.print(", ");
-    Serial.print(roll-roll_start, 0);
-    Serial.println();
-    lastPrint = millis(); // Update lastPrint time
-  }
-  delay(50); //about 20 Hz, since that is the internal magnetometer update rate
 }
 
 
@@ -271,10 +262,10 @@ void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy, fl
   hy = az * mx - ax * mz;
   hz = ax * my - ay * mx;
   // Normalise horizon vector
-  norm = sqrt(hx * hx + hy * hy + hz * hz);
-  if (norm == 0.0f) return; // Handle div by zero
+  norm = (hx * hx + hy * hy + hz * hz);
+  if (norm == 0.0f) return; // Handle div by zero, which is unlikely
 
-  norm = 1.0f / norm;
+  norm = 1.0f / sqrt(norm);
   hx *= norm;
   hy *= norm;
   hz *= norm;
@@ -295,16 +286,17 @@ void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy, fl
   ex = (ay * uz - az * uy) + (hy * wz - hz * wy);
   ey = (az * ux - ax * uz) + (hz * wx - hx * wz);
   ez = (ax * uy - ay * ux) + (hx * wy - hy * wx);
-
+  eMag = ex * ex + ey * ey + ez * ez; //debug, squared magnitude of error vector
+  
   if (Ki > 0.0f)
   {
     eInt[0] += ex;      // accumulate integral error
     eInt[1] += ey;
     eInt[2] += ez;
     // Apply I feedback
-    gx += Ki * eInt[0];
-    gy += Ki * eInt[1];
-    gz += Ki * eInt[2];
+    gx += Ki * eInt[0]*deltat;
+    gy += Ki * eInt[1]*deltat;
+    gz += Ki * eInt[2]*deltat;
   }
 
 

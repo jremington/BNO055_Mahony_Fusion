@@ -16,12 +16,12 @@ The output of calibrate3.py will be offsets and a correction matrix to be applie
 
 The two programs BNO055_tiltComp.ino and BNO055_Mahony.ino show how the corrections are applied.
 
-#Example output representation of calibrated accelerometer data (automatically produced by calibrate3.py)
+Example output representation of calibrated accelerometer data (automatically produced by calibrate3.py)
 
 ![bno055_acc_cal](https://github.com/user-attachments/assets/44bc021d-9d8b-48cd-ad0e-90138bdcdff9)
 
 
-#NOTES on sensor coordinate system
+NOTES on sensor coordinate system
 
 The default x,y,z Cartesian coordinate system for the BNO055 is found from the IC package orientation.
 The code assumes X points North and Z up for yaw=0, pitch and roll are about the Y and X axes respectively. 

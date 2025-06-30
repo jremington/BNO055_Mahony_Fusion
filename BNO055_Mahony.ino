@@ -272,12 +272,12 @@ void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy, fl
   hy *= norm;
   hz *= norm;
 
-  // Estimated direction of Up reference vector
+  // Estimated direction of Up reference vector in body frame
   ux = 2.0f * (q2q4 - q1q3);
   uy = 2.0f * (q1q2 + q3q4);
   uz = q1q1 - q2q2 - q3q3 + q4q4;
 
-  // estimated direction of horizon (West) reference vector
+  // estimated direction of horizon (West) reference vector in body frame
   wx = 2.0f * (q2q3 + q1q4);
   wy = q1q1 - q2q2 + q3q3 - q4q4;
   wz = 2.0f * (q3q4 - q1q2);

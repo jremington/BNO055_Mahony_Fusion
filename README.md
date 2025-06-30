@@ -29,3 +29,10 @@ The code assumes X points North and Z up for yaw=0, pitch and roll are about the
 The default axial assignments can be remapped in the code AFTER calibration corrections are applied, but be sure to maintain a right handed coordinate system. See comments in code.
 
 ![BNO055_sensor_axes](https://github.com/user-attachments/assets/29e71baa-8792-407b-90f1-b32d8829fae2)
+
+Example output of the Mahony filter, hand held sensor.   Euler angle yaw = blue, pitch = red, roll = green are shown. 
+
+The magnetometer is nearly a factor of ten noiser than the accelerometer, which explains the increased noise in the blue yaw trace, even when the accelerometer is still.
+
+![ypr](https://github.com/user-attachments/assets/ed5f563e-096e-40ac-a082-0c9a9466bd5f)
+

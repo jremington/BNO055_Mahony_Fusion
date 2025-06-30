@@ -53,6 +53,9 @@ void setup() {
   Serial.print("Operation Mode set to ");
   Serial.println(result, HEX);
   Serial.println("Setup done");
+  Serial.println("Turn sensor slowly to collect acc/mag data for /r/n 
+    several hundred orientations uniformly covering the 3D sphere");
+  Serial.println("copy/paste the data and create acc/mag .CSV files for input to calibrate3.py");
 }
 
 void loop() {

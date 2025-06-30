@@ -31,7 +31,7 @@ The default axial assignments can be remapped in the code AFTER calibration corr
 ![BNO055_sensor_axes](https://github.com/user-attachments/assets/29e71baa-8792-407b-90f1-b32d8829fae2)
 
 Example output of the Mahony filter, hand held sensor.   
-Euler angles **yaw = blue, pitch = red, roll = green** are shown. 
+Euler angles shown: **yaw = blue, pitch = red, roll = green**. 
 
 The magnetometer, which is the basis for the yaw angle measurement, is nearly a factor of ten noiser than the accelerometer. This explains the increased noise in the blue yaw trace, even when the sensor is  held still. Y scale is degrees.
 

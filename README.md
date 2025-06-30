@@ -32,7 +32,7 @@ The default axial assignments can be remapped in the code AFTER calibration corr
 
 Example output of the Mahony filter, hand held sensor.   Euler angle yaw = blue, pitch = red, roll = green are shown. 
 
-The magnetometer is nearly a factor of ten noiser than the accelerometer, which explains the increased noise in the blue yaw trace, even when the accelerometer is still.
+The magnetometer is nearly a factor of ten noiser than the accelerometer, which explains the increased noise in the blue yaw trace, even when the sensor is  held still.
 
 ![ypr](https://github.com/user-attachments/assets/ed5f563e-096e-40ac-a082-0c9a9466bd5f)
 

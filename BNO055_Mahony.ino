@@ -35,7 +35,8 @@ float declination = -14.84;
 
 // These are the free parameters in the Mahony filter and fusion scheme,
 // Kp for proportional feedback, Ki for integral
-// Kp is not optimized and will depend on the sensor. Kp =1.0 works; Ki seems not to be needed.
+// Kp is not optimized and will depend on the sensor. Kp=1.0 works but response is sluggish 
+// (Kp=4 is about right for my example). Ki seems not to be needed.
 
 #define Kp 1.0
 #define Ki 0.0
@@ -43,9 +44,9 @@ float declination = -14.84;
 unsigned long now = 0, lastUpdate = 0, lastPrint = 0; //micros() timers for AHRS loop
 float deltat = 0;  //loop time in seconds
 #define PRINT_SPEED 200 // ms between angle prints
-float eMag = 0.0; //debug, magnitude of error vector (global)
+float eMag = 0.0; //debug, squared magnitude of error vector (global)
 
-// Vector for quaternion
+// quaternion vector
 float q[4] = {1.0, 0.0, 0.0, 0.0};
 float yaw, pitch, roll; //Euler angle output
 
@@ -97,8 +98,7 @@ void setup() {
 
   if (cal_gyro) get_gyro_offsets();
   lastPrint = millis(); //reset to start
-
-  //  Serial.println("Starting Mahony filter");
+  lastUpdate = micros();
 }
 
 void loop() {

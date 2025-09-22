@@ -8,9 +8,9 @@ Many users have reported the poor performance of the obsolete Bosch BNO055 Absol
 
 **C/C++ Arduino** code in this repository can be used to access the raw sensor data from the accelerometer, magnetometer and gyro, which are considerably noisier than more modern replacements, but are still useful.  I include a tilt compensated compass, which reports heading, a Mahony fusion filter which reports 3D orientation, (all tested on an Arduino Uno R3) and a sensor calibration program in Python, which corrects offsets and relative axial scale factor errors in the magnetometer and accelerometer data.
 
-To use the sensor calibration program, run the BNO055_readRaw program to collect accelerometer and magnetometer data, while rotating the sensor steadily and slowly to cover as much of the 3D sphere as possible. A terminal program can be used to capture a log file, which will be in Excel .CVS format (comma separated values): one line each of acc_x, acc_y, acc_z, mag_x, mag_y and mag_z.  
+To use the sensor calibration program, run the BNO055_readRaw program to collect accelerometer and magnetometer data, while rotating the sensor steadily and slowly to cover as much of the 3D sphere as possible. A terminal program can be used to capture a log file, which will be in Excel .CSV format (comma separated values): one line each of acc_x, acc_y, acc_z, mag_x, mag_y and mag_z.  
 
-Edit this file to create two .cvs files, on each for the accelerometer data, and submit each in a separate run of calibrate3.py (edit input file name in code).
+Edit this file to create two .CSV files, on each for the accelerometer data, and submit each in a separate run of calibrate3.py (edit input file name in code).
 
 The output of calibrate3.py will be offsets and a correction matrix to be applied to subsequent raw accelerometer and magnetometer data. The correction data need to be edited and included in the source code for the fusion and tilt-compensated compass programs.
 

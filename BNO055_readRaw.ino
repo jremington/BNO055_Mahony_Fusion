@@ -72,7 +72,8 @@ void loop() {
     if (i<2) Serial.print(", ");
   }
   /* optional print gyro data
-    int gyro[3] = {0};  //raw gyro values
+  Serial.print(", ");
+  int gyro[3] = {0};  //raw gyro values
   I2C_get(BNO055_A0, BNO055_GYRO_DATA, (uint8_t *)gyro, 6);  //little endian in both sensor and Arduino
   for (int i = 0; i < 3; i++) {
     Serial.print(gyro[i]);

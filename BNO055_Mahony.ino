@@ -38,7 +38,7 @@ float declination = -14.84;
 // Kp is not optimized and will depend on the sensor. Kp=1.0 works but response is sluggish 
 // (Kp=4 is about right for my example). Ki seems not to be needed.
 
-#define Kp 1.0
+#define Kp 4.0
 #define Ki 0.0
 
 unsigned long now = 0, lastUpdate = 0, lastPrint = 0; //micros() timers for AHRS loop
@@ -96,8 +96,12 @@ void setup() {
   //  Serial.println("Setup done");
   delay(1000); //need some delay or get zeros
 
-  if (cal_gyro) get_gyro_offsets();
-  lastPrint = millis(); //reset to start
+  if (cal_gyro) {
+    Serial.print("wait for gyro calibration: ");
+    get_gyro_offsets();
+    Serial.println("done");
+  }
+  lastPrint = millis(); //reset timers for loop
   lastUpdate = micros();
 }
 
@@ -328,3 +332,4 @@ void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy, fl
   q[2] = q3 * norm;
   q[3] = q4 * norm;
 }
+

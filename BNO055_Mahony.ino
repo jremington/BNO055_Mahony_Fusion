@@ -31,14 +31,14 @@ float M_Ainv[3][3]
 };
 
 // local magnetic declination in degrees
-float declination = -14.84;
+float declination = -14.3;
 
 // These are the free parameters in the Mahony filter and fusion scheme,
 // Kp for proportional feedback, Ki for integral
-// Kp is not optimized and will depend on the sensor. Kp=1.0 works but response is sluggish 
-// (Kp=4 is about right for my example). Ki seems not to be needed.
+// CRITICAL: Kp is not optimized and will depend on the sensor. Kp=1.0 works but response is sluggish 
+// (Kp=15 is about right for my example). Ki seems not to be needed.
 
-#define Kp 4.0
+#define Kp 15.0
 #define Ki 0.0
 
 unsigned long now = 0, lastUpdate = 0, lastPrint = 0; //micros() timers for AHRS loop

@@ -38,7 +38,7 @@ float declination = -14.3;
 // CRITICAL: Kp is not optimized and will depend on the sensor. Kp=1.0 works but response is sluggish 
 // (Kp=15 is about right for my example). Ki seems not to be needed.
 
-#define Kp 15.0
+#define Kp 15.0  //critical parameter, adjust for accuracy and stability
 #define Ki 0.0
 
 unsigned long now = 0, lastUpdate = 0, lastPrint = 0; //micros() timers for AHRS loop

@@ -24,7 +24,7 @@ Example output representation of calibrated accelerometer data (automatically pr
 NOTES on sensor coordinate system
 
 The default x,y,z Cartesian coordinate system for the BNO055 is found from the IC package orientation.
-The code assumes X points North and Z up for yaw=0, pitch and roll are about the Y and X axes respectively. 
+The code in this repository assumes that X points North and Z up for yaw=0. Pitch and roll are about the Y and X axes respectively. 
 
 The default axial assignments can be remapped in the code AFTER calibration corrections are applied, but be sure to maintain a right handed coordinate system. See comments in code.
 

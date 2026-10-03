@@ -30,7 +30,7 @@ The default axial assignments can be remapped in the code AFTER calibration corr
 
 ![BNO055_sensor_axes](https://github.com/user-attachments/assets/29e71baa-8792-407b-90f1-b32d8829fae2)
 
-Example output of the Mahony filter, hand held sensor.   
+Example output of the Mahony filter. The hand held sensor was oriented in a variety of ways while collecting the data.   
 Euler angles shown: **yaw = blue, pitch = red, roll = green**. Y scale is degrees.
 
 ![ypr](https://github.com/user-attachments/assets/ed5f563e-096e-40ac-a082-0c9a9466bd5f)

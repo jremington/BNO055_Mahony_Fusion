@@ -2,7 +2,7 @@
 // S. James Remington 6/28/2025
 #include <Wire.h>
 #include "BNO055.h";
-// rate gyro scale is 16LSB/dps or 900LSB/(radian/sec)
+// rate gyro scale is 16LSB/dps or 917LSB/(radian/sec)
 
 // utility routines for Wire
 // get N bytes of data, starting from address "reg"
